@@ -10,8 +10,10 @@ class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, unique=True, nullable=False)
+    # (20) added as max char length for username
+    username = db.Column(db.String(20), unique=True, nullable=False)
     admin = db.Column(db.Boolean, default=False)
+    _password_hash = db.Column(db.String)
 
     def __repr__(self):
         return f"Username: {self.username}"
