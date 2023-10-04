@@ -49,8 +49,10 @@ class Comment(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    ticket_id = db.Column(db.Integer, db.ForeignKey("tickets.id"))
 
     def __repr__(self):
         return f"body: {self.body}"
