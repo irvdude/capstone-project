@@ -22,8 +22,8 @@ from models import User, TicketStatus, Ticket, Comment, Role
 
 
 class Landing(Resource):
-    def index():
-        return "<h1>Project Server</h1>"
+    def get(self):
+        return "Project Server"
 
 
 api.add_resource(Landing, "/", endpoint="landing")
