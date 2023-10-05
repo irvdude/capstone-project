@@ -40,6 +40,8 @@ class Ticket(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
+    comments = db.relationship("Comment", backref="ticket")
+
     def __repr__(self):
         return f"Title {self.title}, Status: {self.status}, Created: {self.created_at}"
 
