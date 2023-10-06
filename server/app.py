@@ -105,6 +105,46 @@ class TicketsbyID(Resource):
 
 api.add_resource(TicketsbyID, "/tickets/<int:id>")
 
+# Signup
+
+
+# Login
+class Login(Resource):
+    def get(self):
+        response_dict_list = [u.to_dict() for u in User.query.all()]
+
+        response = make_response(
+            jsonify(response_dict_list),
+            200,
+        )
+
+        return response
+
+    def post(self):
+        user = User.query.filter(
+            User.username == request.get_json()["username"]
+        ).first()
+        session["user_id"] = user.id
+        return jsonify(user.to_dict())
+
+
+api.add_resource(Login, "/login")
+
+
+# Check Session
+class CheckSession(Resource):
+    def get(self):
+        user = User.query.filter(User.id == session.get("user_id")).first()
+        if user:
+            return jsonify(user.to_dict())
+        else:
+            return jsonify({"message": "401: Not Authorized"}), 401
+
+
+api.add_resource(CheckSession, "/check_session")
+
+# Logout
+
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
