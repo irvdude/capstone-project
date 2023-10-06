@@ -65,7 +65,17 @@ class Tickets(Resource):
 api.add_resource(Tickets, "/tickets", endpoint="tickets")
 
 
-#
+# Ticket by ID
+class TicketsbyID(Resource):
+    def get(self, id):
+        response_dict = Ticket.query.filter_by(id=id).first().to_dict()
+
+        response = make_response(response_dict, 200)
+
+        return response
+
+
+api.add_resource(TicketsbyID, "/tickets/<int:id>")
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
