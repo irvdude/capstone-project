@@ -1,6 +1,7 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import validates
 
 from config import db, bcrypt
 from enum import Enum
@@ -66,6 +67,12 @@ class Ticket(db.Model, SerializerMixin):
             "created_at": self.created_at,
             "updated_at": self.updated_at,
         }
+
+    @validates("body")
+    def validate_instructions(self, key, body):
+        if len(body) < 50:
+            raise ValueError("Body must be at a minimum of 50 characters")
+        return body
 
     def __repr__(self):
         return f"Title {self.title}, Status: {self.status}, Created: {self.created_at}"
