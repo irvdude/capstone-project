@@ -55,6 +55,18 @@ class Ticket(db.Model, SerializerMixin):
 
     comments = db.relationship("Comment", backref="ticket")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "body": self.body,
+            "status": self.status.value
+            if isinstance(self.status, Enum)
+            else self.status,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+        }
+
     def __repr__(self):
         return f"Title {self.title}, Status: {self.status}, Created: {self.created_at}"
 
