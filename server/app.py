@@ -47,9 +47,10 @@ class Tickets(Resource):
 
     # post ticket
     def post(self):
+        data = request.get_json()
         new_ticket = Ticket(
-            title=request.form["title"],
-            body=request.form["body"],
+            title=data["title"],
+            body=data["body"],
         )
 
         db.session.add(new_ticket)
@@ -70,7 +71,34 @@ class TicketsbyID(Resource):
     def get(self, id):
         response_dict = Ticket.query.filter_by(id=id).first().to_dict()
 
+        response = make_response(jsonify(response_dict), 200)
+
+        return response
+
+    def patch(self, id):
+        ticket = Ticket.query.filter(Ticket.id == id).first()
+
+        for attr in request.json:
+            setattr(ticket, attr, request.json[attr])
+
+        db.session.add(ticket)
+        db.session.commit()
+
+        response_dict = ticket.to_dict()
+
         response = make_response(response_dict, 200)
+
+        return response
+
+    def delete(self, id):
+        ticket = Ticket.query.filter(Ticket.id == id).first()
+
+        db.session.delete(ticket)
+        db.session.commit()
+
+        response_dict = ""
+
+        response = make_response(jsonify(response_dict), 204)
 
         return response
 
