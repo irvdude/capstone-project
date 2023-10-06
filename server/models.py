@@ -33,6 +33,10 @@ class User(db.Model, SerializerMixin):
     def authenticate(self, password):
         return bcrypt.check_password_hash(self._password_hash, password.encode("utf-8"))
 
+    @staticmethod
+    def simple_hash(input):
+        return sum(bytearray(input, encoding="utf-8"))
+
     def __repr__(self):
         return f"Username: {self.username}, Admin?: {self.admin}"
 

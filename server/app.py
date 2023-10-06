@@ -105,7 +105,24 @@ class TicketsbyID(Resource):
 
 api.add_resource(TicketsbyID, "/tickets/<int:id>")
 
+
+# Clear Session
+class ClearSession(Resource):
+    def delete(self):
+        session["user_id"] = None
+
+        return {}, 204
+
+
 # Signup
+class Signup(Resource):
+    def post(self):
+        json = request.get_json()
+        user = User(username=json["username"], _password_hash=json["password"])
+        db.session.add(user)
+        db.session.commit()
+        session["user_id"] = user.id
+        return user.to_dict(), 201
 
 
 # Login
@@ -124,8 +141,12 @@ class Login(Resource):
         user = User.query.filter(
             User.username == request.get_json()["username"]
         ).first()
-        session["user_id"] = user.id
-        return jsonify(user.to_dict())
+        password = request.get_json()["password"]
+        if user.authenticate(password):
+            session["user_id"] = user.id
+            return user.to_dict(), 200
+
+        return {"error": "Invalid username or password"}, 401
 
 
 api.add_resource(Login, "/login")
