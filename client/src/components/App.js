@@ -1,14 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import Tickets from "./Tickets";
+import NavBar from "./NavBar";
 
 function App() {
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
-    fetch("/tickets")
-      .then((r) => r.json())
-      .then((tickets) => console.log(tickets));
+    fetch("/check_session").then((r) => {
+      if (r.ok) {
+        r.json().then((user) => setUser(user));
+      }
+    });
   }, []);
 
-  return <h1>Logged tickets</h1>;
+  return <h1>Issues</h1>;
 }
 
-export default App;
+function Root() {
+  return (
+    <Router>
+      <NavBar />
+      <Switch>
+        <Route exact path="/">
+          <App />
+        </Route>
+        <Route exact path="/tickets">
+          <Tickets />
+        </Route>
+        {/* Add other routes here if needed */}
+      </Switch>
+    </Router>
+  );
+}
+
+export default Root;
