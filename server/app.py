@@ -195,7 +195,81 @@ class Logout(Resource):
 
 api.add_resource(Logout, "/logout")
 
+
 # COMMENTS
+class CommentsByID(Resource):
+    def get(self, id):
+        response_dict = Comment.query.filter_by(id=id).first().to_dict()
+
+        response = make_response(jsonify(response_dict), 200)
+
+        return response
+
+    def patch(self, id):
+        comment = Comment.query.filter(Comment.id == id).first()
+
+        for attr in request.json:
+            setattr(comment, attr, request.json[attr])
+
+        db.session.add(comment)
+        db.session.commit()
+
+        response_dict = comment.to_dict()
+
+        response = make_response(response_dict, 200)
+
+        return response
+
+    def delete(self, id):
+        comment = Comment.query.filter(Comment.id == id).first()
+
+        db.session.delete(comment)
+        db.session.commit()
+
+        response_dict = ""
+
+        response = make_response(jsonify(response_dict), 204)
+
+        return response
+
+
+api.add_resource(CommentsByID, "/comments/<int:id>")
+
+
+class CommentsByTicket(Resource):
+    def get(self, ticket_id):
+        response_dict_list = [
+            c.to_dict()
+            for c in Comment.query.filter(Comment.ticket_id == ticket_id).all()
+        ]
+
+        response = make_response(
+            jsonify(response_dict_list),
+            200,
+        )
+
+        return response
+
+    def post(self, ticket_id):
+        ticket = Ticket.query.get_or_404(ticket_id)
+        data = request.get_json()
+        comment = Comment(
+            body=data["body"],
+            user_id=data["user_id"],
+            ticket_id=ticket_id,
+        )
+
+        db.session.add(comment)
+        db.session.commit()
+
+        response_dict = comment.to_dict()
+
+        response = make_response(response_dict, 201)
+
+        return response
+
+
+api.add_resource(CommentsByTicket, "/tickets/<int:ticket_id>/comments")
 
 
 if __name__ == "__main__":

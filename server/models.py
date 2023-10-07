@@ -95,6 +95,15 @@ class Comment(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     ticket_id = db.Column(db.Integer, db.ForeignKey("tickets.id"))
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "body": self.body,
+            "created_at": self.created_at,
+            "user_id": self.user_id,
+            "ticket_id": self.ticket_id,
+        }
+
     def __repr__(self):
         return f"body: {self.body}"
 
