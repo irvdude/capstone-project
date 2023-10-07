@@ -19,6 +19,8 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String)
 
     comments = db.relationship("Comment", backref="user")
+    tickets = db.relationship("Ticket", backref="creator")
+
     roles = db.relationship("Role", secondary="role_identifier")
 
     @hybrid_property
@@ -55,6 +57,7 @@ class Ticket(db.Model, SerializerMixin):
     status = db.Column(
         db.Enum(TicketStatus), default=TicketStatus.OPENED
     )  # either opened or resolved
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 

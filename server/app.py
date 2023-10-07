@@ -106,6 +106,24 @@ class TicketsbyID(Resource):
 api.add_resource(TicketsbyID, "/tickets/<int:id>")
 
 
+# List Tickets by user
+class TicketsByUser(Resource):
+    def get(self, id):
+        response_dict_list = [
+            t.to_dict() for t in Ticket.query.filter_by(Ticket.user_id == id).all()
+        ]
+
+        response = make_response(
+            jsonify(response_dict_list),
+            200,
+        )
+
+        return response
+
+
+api.add_resource(TicketsByUser, "/users/<int:id>/tickets")
+
+
 # Clear Session
 class ClearSession(Resource):
     def delete(self):
@@ -123,6 +141,9 @@ class Signup(Resource):
         db.session.commit()
         session["user_id"] = user.id
         return user.to_dict(), 201
+
+
+api.add_resource(Signup, "/signup")
 
 
 # Login
@@ -173,6 +194,9 @@ class Logout(Resource):
 
 
 api.add_resource(Logout, "/logout")
+
+# COMMENTS
+
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
