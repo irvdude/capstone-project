@@ -2,8 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import Tickets from "./Tickets";
 import NavBar from "./NavBar";
+import SignUp from "./SignUp";
 
 function App() {
+  return <h1>Issues</h1>;
+}
+
+function Root() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -14,22 +19,28 @@ function App() {
     });
   }, []);
 
-  return <h1>Issues</h1>;
-}
-
-function Root() {
   return (
     <Router>
       <NavBar />
-      <Switch>
-        <Route exact path="/">
-          <App />
-        </Route>
-        <Route exact path="/tickets">
-          <Tickets />
-        </Route>
-        {/* Add other routes here if needed */}
-      </Switch>
+      {user ? (
+        <Switch>
+          <Route path="/">
+            <App />
+          </Route>
+        </Switch>
+      ) : (
+        <Switch>
+          <Route path="/signup">
+            <SignUp setUser={setUser} />
+          </Route>
+          {/* <Route path="/login">
+            <Login setUser={setUser} />
+          </Route> */}
+          <Route path="/">
+            <App />
+          </Route>
+        </Switch>
+      )}
     </Router>
   );
 }

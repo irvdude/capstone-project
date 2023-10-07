@@ -124,12 +124,12 @@ class TicketsByUser(Resource):
 api.add_resource(TicketsByUser, "/users/<int:id>/tickets")
 
 
-# Clear Session
-class ClearSession(Resource):
-    def delete(self):
-        session["user_id"] = None
+# # Clear Session
+# class ClearSession(Resource):
+#     def delete(self):
+#         session["user_id"] = None
 
-        return {}, 204
+#         return {}, 204
 
 
 # Signup
