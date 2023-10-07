@@ -19,7 +19,7 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String)
 
     comments = db.relationship("Comment", backref="user")
-    tickets = db.relationship("Ticket", backref="creator")
+    tickets = db.relationship("Ticket", backref="user")
 
     roles = db.relationship("Role", secondary="role_identifier")
 
@@ -77,7 +77,7 @@ class Ticket(db.Model, SerializerMixin):
 
     @validates("body")
     def validate_instructions(self, key, body):
-        if len(body) < 50:
+        if len(body) < 10:
             raise ValueError("Body must be at a minimum of 50 characters")
         return body
 

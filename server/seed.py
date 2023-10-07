@@ -76,7 +76,9 @@ if __name__ == "__main__":
         # create 10 Tickets
         print("Creating tickets...")
         tickets = []
+        all_users = User.query.all()
         for i in range(10):
+            user = rc(all_users)
             created = fake.date_time_between(start_date="-1y", end_date="now")
             updated = fake.date_time_between(start_date=created, end_date="now")
             ticket = Ticket(
@@ -85,6 +87,7 @@ if __name__ == "__main__":
                 status=rc(list(TicketStatus)),
                 created_at=created,
                 updated_at=updated,
+                user_id=user.id,
             )
             tickets.append(ticket)
 

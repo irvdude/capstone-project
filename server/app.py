@@ -110,7 +110,7 @@ api.add_resource(TicketsbyID, "/tickets/<int:id>")
 class TicketsByUser(Resource):
     def get(self, id):
         response_dict_list = [
-            t.to_dict() for t in Ticket.query.filter_by(Ticket.user_id == id).all()
+            t.to_dict() for t in Ticket.query.filter(Ticket.user_id == id).all()
         ]
 
         response = make_response(
