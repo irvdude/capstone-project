@@ -9,6 +9,28 @@ function Tickets() {
       .then((data) => setTickets(data));
   }, []);
 
+  //   const addTicket = (newTicket) => {
+  //     const ticketsArray = [...tickets, newTicket];
+  //     setTickets(ticketsArray);
+  //   };
+
+  //   const updateTicket = (updatedTicket) => {
+  //     const newTicketArray = tickets.map((ticket) => {
+  //       if (ticket.id === updatedTicket.id) return updatedTicket;
+  //       else return ticket;
+  //     });
+  //     setTickets(newTicketArray); // Fixed typo here
+  //   };
+
+  //   const deleteTicket = (id) => {
+  //     const newTicketArray = tickets.filter((ticket) => ticket.id !== id);
+  //     setTickets(newTicketArray); // Fixed typo here
+  //   };
+
+  //   const displayedTickets = tickets.filter((ticket) => {
+  //     return ticket.name.toLowerCase().includes(searchTerm.toLowerCase());
+  //   });
+
   return (
     <div>
       <h1>All Tickets</h1>
