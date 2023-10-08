@@ -9,10 +9,6 @@ function Tickets() {
       .then((data) => setTickets(data));
   }, []);
 
-  //   const addTicket = (newTicket) => {
-  //     const ticketsArray = [...tickets, newTicket];
-  //     setTickets(ticketsArray);
-  //   };
 
   //   const updateTicket = (updatedTicket) => {
   //     const newTicketArray = tickets.map((ticket) => {

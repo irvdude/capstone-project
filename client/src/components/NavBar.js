@@ -21,6 +21,8 @@ function NavBar({ user, setUser }) {
           <div>
             <Link to="/tickets">Tickets</Link>
             <br></br>
+            <Link to="/addtickets">Add Ticket</Link>
+            <br></br>
             <button onClick={handleLogoutClick}>Logout</button>
           </div>
         ) : (

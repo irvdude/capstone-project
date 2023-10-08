@@ -4,10 +4,9 @@ import Tickets from "./Tickets";
 import NavBar from "./NavBar";
 import SignUp from "./SignUp";
 import Login from "./Login";
+import NewTicket from "./NewTicket";
 
-function App({ user }) {
-  const [tickets, setTickets] = useState([]);
-
+function App({ user, tickets, setTickets }) {
   useEffect(() => {
     fetch("/tickets")
       .then((r) => r.json())
@@ -19,10 +18,10 @@ function App({ user }) {
     setSearchTerm(e.target.value);
   };
 
-  // const addTicket = (newTicket) => {
-  //   const ticketsArray = [...tickets, newTicket];
-  //   setTickets(ticketsArray);
-  // };
+  const addTicket = (newTicket) => {
+    const ticketsArray = [...tickets, newTicket];
+    setTickets(ticketsArray);
+  };
 
   // const updateTicket = (updatedTicket) => {
   //   const newTicketArray = tickets.map((ticket) => {
@@ -72,8 +71,9 @@ function App({ user }) {
   }
 }
 
-function Root({ tickets, setTickets }) {
+function Root() {
   const [user, setUser] = useState(null);
+  const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
     fetch("/check_session").then((r) => {
@@ -82,6 +82,11 @@ function Root({ tickets, setTickets }) {
       }
     });
   }, []);
+
+  const addTicket = (newTicket) => {
+    const ticketsArray = [...tickets, newTicket];
+    setTickets(ticketsArray);
+  };
 
   return (
     <BrowserRouter>
@@ -94,6 +99,9 @@ function Root({ tickets, setTickets }) {
             </Route>
             <Route exact path="/tickets">
               <Tickets tickets={tickets} setTickets={setTickets} />
+            </Route>
+            <Route exact path="/addtickets">
+              <NewTicket addTicket={addTicket} />
             </Route>
           </Switch>
         ) : (
