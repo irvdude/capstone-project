@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 
 function Tickets() {
   const [tickets, setTickets] = useState([]);

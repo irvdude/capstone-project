@@ -124,7 +124,7 @@ class TicketsByUser(Resource):
 api.add_resource(TicketsByUser, "/users/<int:id>/tickets")
 
 
-# # Clear Session
+# Clear Session
 # class ClearSession(Resource):
 #     def delete(self):
 #         session["user_id"] = None
@@ -132,11 +132,20 @@ api.add_resource(TicketsByUser, "/users/<int:id>/tickets")
 #         return {}, 204
 
 
+# api.add_resource(ClearSession, "/clear", endpoint="clear")
+
+
 # Signup
 class Signup(Resource):
     def post(self):
         json = request.get_json()
-        user = User(username=json["username"], _password_hash=json["password"])
+        existing_user = User.query.filter_by(username=json["username"]).first()
+        if existing_user:
+            return {"error": "Username already in use"}, 400
+        if json["password"] != json.get("password_confirmation"):
+            return {"error": "Passwords don't match"}, 400
+        user = User(username=json["username"])
+        user.password_hash = json["password"]
         db.session.add(user)
         db.session.commit()
         session["user_id"] = user.id
@@ -152,7 +161,7 @@ class Login(Resource):
         response_dict_list = [u.to_dict() for u in User.query.all()]
 
         response = make_response(
-            jsonify(response_dict_list),
+            response_dict_list,
             200,
         )
 
@@ -178,9 +187,9 @@ class CheckSession(Resource):
     def get(self):
         user = User.query.filter(User.id == session.get("user_id")).first()
         if user:
-            return jsonify(user.to_dict())
+            return user.to_dict()
         else:
-            return jsonify({"message": "401: Not Authorized"}), 401
+            return {"error": "No session present"}, 401
 
 
 api.add_resource(CheckSession, "/check_session")
@@ -188,9 +197,9 @@ api.add_resource(CheckSession, "/check_session")
 
 # Logout
 class Logout(Resource):
-    def logout(self):
+    def delete(self):
         session["user_id"] = None
-        return jsonify({"message": "204: No Content"}), 204
+        return "", 204
 
 
 api.add_resource(Logout, "/logout")

@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom/cjs/react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
+import Tickets from "./Tickets";
 
 function NavBar({ user, setUser }) {
   function handleLogoutClick() {
@@ -11,27 +12,26 @@ function NavBar({ user, setUser }) {
   }
 
   return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/">Landing</Link>
-        </li>
-        <li>
-          <Link to="/tickets">Tickets</Link>
-        </li>
-        <div>
-          {user ? (
+    <header>
+      <div>
+        <Link to="/">Home</Link>
+      </div>
+      <div>
+        {user ? (
+          <div>
+            <Link to="/tickets">Tickets</Link>
+            <br></br>
             <button onClick={handleLogoutClick}>Logout</button>
-          ) : (
-            <>
-              <Link to="/signup">Signup</Link>
-              <br></br>
-              <Link to="/login">Login</Link>
-            </>
-          )}
-        </div>
-      </ul>
-    </nav>
+          </div>
+        ) : (
+          <>
+            <Link to="/login">Login</Link>
+            <br></br>
+            <Link to="/signup">Signup</Link>
+          </>
+        )}
+      </div>
+    </header>
   );
 }
 
