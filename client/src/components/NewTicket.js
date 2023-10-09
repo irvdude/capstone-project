@@ -22,7 +22,7 @@ function NewTicket({ addTicket }) {
 
   return (
     <div>
-      <h2>New Plant</h2>
+      <h2>New Ticket</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
