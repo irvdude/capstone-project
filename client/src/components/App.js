@@ -5,6 +5,7 @@ import NavBar from "./NavBar";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import NewTicket from "./NewTicket";
+import CommentsByTicket from "./Comments";
 
 function App({ user, tickets, setTickets }) {
   useEffect(() => {
@@ -18,10 +19,10 @@ function App({ user, tickets, setTickets }) {
     setSearchTerm(e.target.value);
   };
 
-  const addTicket = (newTicket) => {
-    const ticketsArray = [...tickets, newTicket];
-    setTickets(ticketsArray);
-  };
+  // const addTicket = (newTicket) => {
+  //   const ticketsArray = [...tickets, newTicket];
+  //   setTickets(ticketsArray);
+  // };
 
   // const updateTicket = (updatedTicket) => {
   //   const newTicketArray = tickets.map((ticket) => {
@@ -88,6 +89,21 @@ function Root() {
     setTickets(ticketsArray);
   };
 
+  const handleDeleteTicket = (id) => {
+    const ticketsArray = tickets.filter((ticket) => ticket.id !== id);
+    setTickets(ticketsArray);
+  };
+
+  const handleDeleteClick = async (id) => {
+    const response = await fetch(`/tickets/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      handleDeleteTicket(id);
+      alert("Delete Successful. Please Refresh.");
+    }
+  };
+
   return (
     <BrowserRouter>
       <NavBar user={user} setUser={setUser} />
@@ -95,10 +111,17 @@ function Root() {
         {user ? (
           <Switch>
             <Route exact path="/">
-              <App user={user} tickets={tickets} />
+              <App user={user} tickets={tickets} setTickets={setTickets} />
             </Route>
             <Route exact path="/tickets">
-              <Tickets tickets={tickets} setTickets={setTickets} />
+              <Tickets
+                tickets={tickets}
+                setTickets={setTickets}
+                handleDeleteClick={handleDeleteClick}
+              />
+            </Route>
+            <Route exact path="/comments/:ticketId">
+              <CommentsByTicket userId={user.id} />
             </Route>
             <Route exact path="/addtickets">
               <NewTicket addTicket={addTicket} />
@@ -113,7 +136,7 @@ function Root() {
               <Login setUser={setUser} />
             </Route>
             <Route exact path="/">
-              <App user={user} tickets={tickets} />
+              <App user={user} tickets={tickets} setTickets={setTickets} />
             </Route>
           </Switch>
         )}

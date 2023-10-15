@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
-function Tickets() {
+function Tickets({ handleDeleteClick }) {
   const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
@@ -9,23 +10,11 @@ function Tickets() {
       .then((data) => setTickets(data));
   }, []);
 
+  const history = useHistory();
 
-  //   const updateTicket = (updatedTicket) => {
-  //     const newTicketArray = tickets.map((ticket) => {
-  //       if (ticket.id === updatedTicket.id) return updatedTicket;
-  //       else return ticket;
-  //     });
-  //     setTickets(newTicketArray); // Fixed typo here
-  //   };
-
-  //   const deleteTicket = (id) => {
-  //     const newTicketArray = tickets.filter((ticket) => ticket.id !== id);
-  //     setTickets(newTicketArray); // Fixed typo here
-  //   };
-
-  //   const displayedTickets = tickets.filter((ticket) => {
-  //     return ticket.name.toLowerCase().includes(searchTerm.toLowerCase());
-  //   });
+  const goToComments = (ticketId) => {
+    history.push(`/comments/${ticketId}`);
+  };
 
   return (
     <div>
@@ -34,6 +23,8 @@ function Tickets() {
         {tickets.map((ticket) => (
           <li key={ticket.id}>
             {ticket.title} - {ticket.body}
+            <button onClick={() => goToComments(ticket.id)}>Comments</button>
+            <button onClick={() => handleDeleteClick(ticket.id)}>Delete</button>
           </li>
         ))}
       </ul>
